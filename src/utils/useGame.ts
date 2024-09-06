@@ -26,6 +26,7 @@ export function useGame(operation: (a: number, b: number) => number) {
       state.value.feedback = 'Correct!'
     } else {
       state.value.feedback = `Incorrect. The correct answer was ${correctAnswer.value}.`
+      resetScore()
     }
 
     // Generate new numbers
@@ -34,9 +35,14 @@ export function useGame(operation: (a: number, b: number) => number) {
     state.value.userAnswer = null
   }
 
+  const resetScore = () => {
+    state.value.score = 0
+  }
+
   return {
     state,
     correctAnswer,
-    checkAnswer
+    checkAnswer,
+    resetScore
   }
 }

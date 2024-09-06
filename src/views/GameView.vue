@@ -1,13 +1,17 @@
 <template>
-  <div v-if="game" class="game-view">
-    <h2>{{ game.title }}</h2>
-    <component :is="currentGameComponent" />
+  <div class="bg-red-50 py-12 min-h-screen">
+    <div class="container mx-auto">
+      <div v-if="game" class="game-view">
+        <h2 class="text-2xl mb-8 pb-4 border-b border-black">{{ game.title }}</h2>
+        <component :is="currentGameComponent" />
+      </div>
+      <div v-else>Game not found</div>
+    </div>
   </div>
-  <div v-else>Game not found</div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, defineAsyncComponent } from 'vue'
 import { useRoute } from 'vue-router'
 import { GAMES } from '@/constants/games'
 import type { Game } from '@/constants/games'

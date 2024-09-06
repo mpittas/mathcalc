@@ -36,7 +36,8 @@ const gameData = ref<Game | null>(null)
 
 const currentGameComponent = computed(() => {
   if (!gameData.value) return null
-  return defineAsyncComponent(() => import(`@/components/games/AdditionGame.vue`))
+  const componentName = gameData.value.id.charAt(0).toUpperCase() + gameData.value.id.slice(1)
+  return defineAsyncComponent(() => import(`@/components/games/${componentName}Game.vue`))
 })
 
 const tasks = ref([

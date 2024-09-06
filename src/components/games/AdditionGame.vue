@@ -26,9 +26,15 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useGame } from '@/utils/useGame'
+import { handleGameLogic, resetTasks } from '@/utils/gameUtils'
 
 const props = defineProps<{
-  tasks: Array<{ id: number; description: string; completed: boolean; reward: string }>
+  tasks: Array<{
+    id: number
+    description: string
+    completed: boolean
+    reward: string
+  }>
 }>()
 
 const emit = defineEmits<{
@@ -46,35 +52,15 @@ const handleSubmit = () => {
   const previousScore = state.value.score
   checkAnswer()
 
-  if (state.value.feedback === 'Correct!') {
-    equationsSolved.value++
-
-    // Check for task completion
-    if (equationsSolved.value === 5) {
-      emit('task-completed', 1)
-    }
-    if (state.value.score === 10) {
-      emit('task-completed', 2)
-    }
-    if (timeTaken <= 10) {
-      fastSolves.value++
-      if (fastSolves.value === 3 && !props.tasks[2].completed) {
-        emit('task-completed', 3)
-      }
-    } else {
-      fastSolves.value = 0
-    }
-  } else {
-    // Reset counts when an incorrect answer is given
-    equationsSolved.value = 0
-    fastSolves.value = 0
-  }
+  handleGameLogic(state, equationsSolved, fastSolves, timeTaken, props.tasks, (taskId) =>
+    emit('task-completed', taskId)
+  )
 
   startTime.value = Date.now() // Reset timer for next equation
 
   // Check if score was reset due to incorrect answer
   if (previousScore > 0 && state.value.score === 0) {
-    resetTasks()
+    resetTasks(props.tasks, (taskId) => emit('task-completed', taskId))
   }
 }
 
@@ -85,16 +71,8 @@ watch(
     if (newScore === 0 && oldScore > 0) {
       equationsSolved.value = 0
       fastSolves.value = 0
-      resetTasks()
+      resetTasks(props.tasks, (taskId) => emit('task-completed', taskId))
     }
   }
 )
-
-const resetTasks = () => {
-  props.tasks.forEach((task) => {
-    if (task.completed) {
-      emit('task-completed', task.id) // Emit event to reset task in parent
-    }
-  })
-}
 </script>

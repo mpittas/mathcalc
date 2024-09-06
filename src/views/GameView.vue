@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-red-50 py-12 min-h-screen">
+  <div class="min-h-screen bg-red-50 py-12">
     <div class="container mx-auto">
       <div v-if="game" class="game-view">
         <h2 class="text-2xl mb-8 pb-4 border-b border-black">{{ game.title }}</h2>

@@ -1,5 +1,4 @@
 import { ref, computed } from 'vue'
-import { generateRandomNumber } from '@/utils/mathOperations'
 
 interface GameState {
   score: number
@@ -9,16 +8,32 @@ interface GameState {
   feedback: string
 }
 
-export function useGame(operation: (a: number, b: number) => number) {
+type NumberGenerator = () => { num1: number; num2: number }
+
+export function useGame(
+  operation: (a: number, b: number) => number,
+  generateNumbers: NumberGenerator = () => ({
+    num1: Math.floor(Math.random() * 10) + 1,
+    num2: Math.floor(Math.random() * 10) + 1
+  })
+) {
   const state = ref<GameState>({
     score: 0,
-    num1: generateRandomNumber(1, 10),
-    num2: generateRandomNumber(1, 10),
+    num1: 0,
+    num2: 0,
     userAnswer: null,
     feedback: ''
   })
 
-  const correctAnswer = computed(() => operation(state.value.num1, state.value.num2))
+  const correctAnswer = computed(() =>
+    Number(operation(state.value.num1, state.value.num2).toFixed(2))
+  )
+
+  const generateNewNumbers = () => {
+    const { num1, num2 } = generateNumbers()
+    state.value.num1 = num1
+    state.value.num2 = num2
+  }
 
   const checkAnswer = () => {
     if (state.value.userAnswer === correctAnswer.value) {
@@ -26,23 +41,19 @@ export function useGame(operation: (a: number, b: number) => number) {
       state.value.feedback = 'Correct!'
     } else {
       state.value.feedback = `Incorrect. The correct answer was ${correctAnswer.value}.`
-      resetScore()
     }
 
     // Generate new numbers
-    state.value.num1 = generateRandomNumber(1, 10)
-    state.value.num2 = generateRandomNumber(1, 10)
+    generateNewNumbers()
     state.value.userAnswer = null
   }
 
-  const resetScore = () => {
-    state.value.score = 0
-  }
+  // Initialize the game
+  generateNewNumbers()
 
   return {
     state,
     correctAnswer,
-    checkAnswer,
-    resetScore
+    checkAnswer
   }
 }

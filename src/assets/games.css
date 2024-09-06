@@ -1,0 +1,32 @@
+/* src/assets/games.css */
+.game-container {
+  @apply max-w-md mx-auto p-6 bg-white rounded-lg shadow-md;
+}
+
+.game-title {
+  @apply text-2xl font-bold mb-4 text-gray-700;
+}
+
+.game-equation {
+  @apply text-xl mb-4 font-semibold text-gray-700;
+}
+
+.game-input {
+  @apply w-full px-4 py-2 mb-4 border border-gray-300 rounded-md shadow-sm;
+  @apply focus:ring-2 focus:ring-gray-500 focus:border-gray-500;
+  @apply transition duration-150 ease-in-out;
+}
+
+.game-button {
+  @apply w-full px-4 py-2 bg-gray-900 text-white rounded-md shadow-sm;
+  @apply hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50;
+  @apply transition duration-150 ease-in-out;
+}
+
+.game-feedback {
+  @apply mt-4 text-lg font-semibold;
+}
+
+.game-score {
+  @apply mt-4 text-lg font-bold text-gray-700;
+}

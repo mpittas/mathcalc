@@ -1,29 +1,53 @@
 <template>
-  <div class="min-h-screen bg-red-50">
-    <div class="container mx-auto">
-      <div v-if="gameData" class="game-view">
-        <h2 class="text-2xl mb-8 pb-4 border-b border-black">{{ gameData.title }}</h2>
+  <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div v-if="gameData" class="game-view bg-white shadow-xl rounded-lg overflow-hidden">
+        <h2 class="text-3xl font-bold mb-8 pb-4 border-b border-gray-200 px-6 pt-6 text-gray-800">
+          {{ gameData.title }}
+        </h2>
 
         <!-- Game Component -->
-        <component :is="currentGameComponent" />
+        <div class="px-6 py-4">
+          <component :is="currentGameComponent" />
+        </div>
 
         <!-- Tasks Section -->
-        <div class="mt-8">
-          <h3 class="text-xl mb-4">Tasks</h3>
-          <ul>
-            <li v-for="(task, index) in tasks" :key="index" class="mb-2">
-              {{ task }}
+        <div class="mt-8 px-6 py-4 bg-gray-50">
+          <h3 class="text-2xl font-semibold mb-4 text-gray-700">Tasks</h3>
+          <ul class="space-y-2">
+            <li
+              v-for="(task, index) in tasks"
+              :key="index"
+              class="flex items-center space-x-2 text-gray-700"
+            >
+              <svg
+                class="w-5 h-5 text-gray-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              <span>{{ task }}</span>
             </li>
           </ul>
         </div>
 
         <!-- Code Section -->
-        <div class="mt-8">
-          <h3 class="text-xl mb-4">Code</h3>
-          <pre><code>{{ gameCode }}</code></pre>
+        <div class="mt-8 px-6 py-4">
+          <h3 class="text-2xl font-semibold mb-4 text-gray-700">Code</h3>
+          <pre class="bg-gray-800 text-white p-4 rounded-lg overflow-x-auto">
+            <code class="text-sm">{{ gameCode }}</code>
+          </pre>
         </div>
       </div>
-      <div v-else>Game not found</div>
+      <div v-else class="text-center text-2xl text-gray-600 font-bold mt-12">Game not found</div>
     </div>
   </div>
 </template>

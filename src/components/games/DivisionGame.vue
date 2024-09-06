@@ -1,12 +1,28 @@
 <!-- src/components/games/DivisionGame.vue -->
 <template>
-  <div class="division-game">
-    <h3>Division Game</h3>
-    <p>{{ num1 }} ÷ {{ num2 }} = ?</p>
-    <input v-model="userAnswer" type="number" step="0.01" @keyup.enter="checkAnswer" />
-    <button @click="checkAnswer">Submit</button>
-    <p v-if="feedback">{{ feedback }}</p>
-    <p>Score: {{ score }}</p>
+  <div class="game-container">
+    <h3 class="game-title">Division Game</h3>
+    <p class="game-equation">{{ num1 }} ÷ {{ num2 }} = ?</p>
+    <input
+      v-model="userAnswer"
+      type="number"
+      step="0.01"
+      @keyup.enter="checkAnswer"
+      class="game-input"
+      placeholder="Enter your answer"
+    />
+    <button @click="checkAnswer" class="game-button">Submit</button>
+    <p
+      v-if="feedback"
+      class="game-feedback"
+      :class="{
+        'text-green-600': feedback === 'Correct!',
+        'text-red-600': feedback !== 'Correct!'
+      }"
+    >
+      {{ feedback }}
+    </p>
+    <p class="game-score">Score: {{ score }}</p>
   </div>
 </template>
 
@@ -32,7 +48,7 @@ const checkAnswer = () => {
     score.value++
     feedback.value = 'Correct!'
   } else {
-    feedback.value = `Incorrect. The correct answer was ${correctAnswer.value}.`
+    feedback.value = `Incorrect. The correct answer was ${correctAnswer.value.toFixed(2)}.`
   }
 
   // Generate new numbers

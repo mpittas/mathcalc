@@ -35,6 +35,7 @@ const checkAnswer = () => {
     feedback.value = 'Correct!'
   } else {
     feedback.value = `Incorrect. The correct answer was ${correctAnswer.value}.`
+    score.value = 0 // Reset score when answer is incorrect
   }
 
   // Generate new numbers

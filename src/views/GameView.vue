@@ -8,18 +8,18 @@
 
         <!-- Game Component -->
         <div class="px-6 py-4">
-          <component :is="currentGameComponent" />
+          <component
+            :is="currentGameComponent"
+            :tasks="tasks"
+            @task-completed="handleTaskCompletion"
+          />
         </div>
 
         <!-- Tasks Section -->
         <div class="mt-8 px-6 py-4 bg-gray-50">
           <h3 class="text-2xl font-semibold mb-4 text-gray-700">Tasks</h3>
           <ul class="space-y-2">
-            <li
-              v-for="(task, index) in tasks"
-              :key="index"
-              class="flex items-center space-x-2 text-gray-700"
-            >
+            <li v-for="task in tasks" :key="task.id" :class="{ 'text-green-500': task.completed }">
               <svg
                 class="w-5 h-5 text-gray-500"
                 fill="none"
@@ -34,17 +34,10 @@
                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 ></path>
               </svg>
-              <span>{{ task }}</span>
+              <span>{{ task.description }}</span>
+              <span v-if="task.completed">(Completed!)</span>
             </li>
           </ul>
-        </div>
-
-        <!-- Code Section -->
-        <div class="mt-8 px-6 py-4">
-          <h3 class="text-2xl font-semibold mb-4 text-gray-700">Code</h3>
-          <pre class="bg-gray-800 text-white p-4 rounded-lg overflow-x-auto">
-            <code class="text-sm">{{ gameCode }}</code>
-          </pre>
         </div>
       </div>
       <div v-else class="text-center text-2xl text-gray-600 font-bold mt-12">Game not found</div>
@@ -68,23 +61,28 @@ const currentGameComponent = computed(() => {
   return defineAsyncComponent(() => import(`@/components/games/${componentName}Game.vue`))
 })
 
-// Example tasks (you would need to implement this)
 const tasks = ref([
-  'Complete 5 equations',
-  'Achieve a score of 10',
-  'Solve equations within 10 seconds each'
+  { id: 1, description: 'Complete 5 equations', completed: false, reward: 'Great job!' },
+  { id: 2, description: 'Achieve a score of 10', completed: false, reward: 'Excellent work!' },
+  {
+    id: 3,
+    description: 'Solve equations within 10 seconds each',
+    completed: false,
+    reward: "You're lightning fast!"
+  }
 ])
-
-// Example game code (you would need to implement this)
-const gameCode = ref(`
-function playGame() {
-  // Game logic here
-}
-`)
 
 onMounted(() => {
   const foundGame = GAMES.find((g) => g.id === gameId.value)
   gameData.value = foundGame || null
   // Here you would typically fetch tasks and code specific to the game
 })
+
+const handleTaskCompletion = (taskId: number) => {
+  const task = tasks.value.find((t) => t.id === taskId)
+  if (task && !task.completed) {
+    task.completed = true
+    alert(task.reward) // Or use a more sophisticated notification system
+  }
+}
 </script>

@@ -8,8 +8,8 @@
 
         <!-- Game Component -->
         <div class="px-6 py-4">
-          <component
-            :is="gameComponent"
+          <GenericGame
+            :gameData="gameData"
             :gameLogic="gameLogic"
             :numberGenerator="numberGenerator"
             :tasks="tasks"
@@ -31,17 +31,13 @@ import { useRoute } from 'vue-router'
 import { GAMES } from '@/constants/games'
 import type { Game } from '@/constants/games'
 import TaskTracker from '@/components/common/TaskTracker.vue'
-import {
-  createGameComponent,
-  createGameLogic,
-  createNumberGenerator
-} from '@/factories/gameFactory'
+import GenericGame from '@/components/common/GenericGame.vue'
+import { createGameLogic, createNumberGenerator } from '@/factories/gameFactory'
 
 const route = useRoute()
 const gameId = computed(() => route.params.id as string)
 const gameData = ref<Game | null>(null)
 
-const gameComponent = computed(() => (gameData.value ? createGameComponent(gameData.value) : null))
 const gameLogic = computed(() => (gameData.value ? createGameLogic(gameData.value) : null))
 const numberGenerator = computed(() =>
   gameData.value ? createNumberGenerator(gameData.value) : null

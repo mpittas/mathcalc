@@ -9,7 +9,9 @@
         <!-- Game Component -->
         <div class="px-6 py-4">
           <component
-            :is="currentGameComponent"
+            :is="gameComponent"
+            :gameLogic="gameLogic"
+            :numberGenerator="numberGenerator"
             :tasks="tasks"
             @task-completed="handleTaskCompletion"
           />
@@ -24,21 +26,26 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, defineAsyncComponent, onMounted } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { GAMES } from '@/constants/games'
 import type { Game } from '@/constants/games'
 import TaskTracker from '@/components/common/TaskTracker.vue'
+import {
+  createGameComponent,
+  createGameLogic,
+  createNumberGenerator
+} from '@/factories/gameFactory'
 
 const route = useRoute()
 const gameId = computed(() => route.params.id as string)
 const gameData = ref<Game | null>(null)
 
-const currentGameComponent = computed(() => {
-  if (!gameData.value) return null
-  const componentName = gameData.value.id.charAt(0).toUpperCase() + gameData.value.id.slice(1)
-  return defineAsyncComponent(() => import(`@/components/games/${componentName}Game.vue`))
-})
+const gameComponent = computed(() => (gameData.value ? createGameComponent(gameData.value) : null))
+const gameLogic = computed(() => (gameData.value ? createGameLogic(gameData.value) : null))
+const numberGenerator = computed(() =>
+  gameData.value ? createNumberGenerator(gameData.value) : null
+)
 
 const tasks = ref([
   {

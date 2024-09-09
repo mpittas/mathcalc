@@ -35,11 +35,19 @@ export function useGame(
     state.value.num2 = num2
   }
 
+  const resetGame = () => {
+    state.value.score = 0
+    state.value.userAnswer = null
+    state.value.feedback = ''
+    generateNewNumbers()
+  }
+
   const checkAnswer = () => {
     if (state.value.userAnswer === correctAnswer.value) {
       state.value.score++
       state.value.feedback = 'Correct!'
     } else {
+      state.value.score = 0 // Reset score on incorrect answer
       state.value.feedback = `Incorrect. The correct answer was ${correctAnswer.value}.`
     }
 
@@ -54,6 +62,7 @@ export function useGame(
   return {
     state,
     correctAnswer,
-    checkAnswer
+    checkAnswer,
+    resetGame
   }
 }

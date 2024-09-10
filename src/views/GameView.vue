@@ -38,9 +38,9 @@ const route = useRoute()
 const gameId = computed(() => route.params.id as string)
 const gameData = ref<Game | null>(null)
 
-const gameLogic = computed(() => (gameData.value ? createGameLogic(gameData.value) : null))
+const gameLogic = computed(() => (gameData.value ? createGameLogic(gameData.value) : () => 0))
 const numberGenerator = computed(() =>
-  gameData.value ? createNumberGenerator(gameData.value) : null
+  gameData.value ? createNumberGenerator(gameData.value) : () => ({ num1: 0, num2: 0 })
 )
 
 const tasks = ref([

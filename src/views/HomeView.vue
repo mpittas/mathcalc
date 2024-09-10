@@ -21,9 +21,9 @@
 </template>
 
 <script setup lang="ts">
-import { GAMES } from '@/constants/games'
+import { GAMES } from '@/utils/games'
 import GameCard from '@/components/common/GameCard.vue'
-import type { Game } from '@/constants/games'
+import type { Game } from '@/utils/games'
 
 const games: Game[] = GAMES
 </script>

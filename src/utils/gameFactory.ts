@@ -1,7 +1,7 @@
 // src/factories/gameFactory.ts
 
 import { defineAsyncComponent } from 'vue'
-import type { Game } from '@/constants/games'
+import type { Game } from '@/utils/games'
 
 export const createGameComponent = (game: Game) => {
   const componentName = game.id.charAt(0).toUpperCase() + game.id.slice(1)

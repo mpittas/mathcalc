@@ -27,6 +27,7 @@ const props = defineProps<{
   }>
 }>()
 
+// TODO: Remove repeating code in all games
 const handleTaskCompleted = (taskId: number) => {
   // Find the task with the given ID and mark it as completed
   const task = props.tasks.find((task) => task.id === taskId)

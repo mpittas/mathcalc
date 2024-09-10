@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
-import type { Game } from '@/constants/games'
+import type { Game } from '@/utils/games'
 
 const props = defineProps<{
   game: Game

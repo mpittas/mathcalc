@@ -28,11 +28,11 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { GAMES } from '@/constants/games'
-import type { Game } from '@/constants/games'
+import { GAMES } from '@/utils/games'
+import type { Game } from '@/utils/games'
 import TaskTracker from '@/components/common/TaskTracker.vue'
 import GenericGame from '@/components/common/GenericGame.vue'
-import { createGameLogic, createNumberGenerator } from '@/factories/gameFactory'
+import { createGameLogic, createNumberGenerator } from '@/utils/gameFactory'
 
 const route = useRoute()
 const gameId = computed(() => route.params.id as string)

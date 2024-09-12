@@ -28,11 +28,11 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { GAMES } from '@/utils/games'
-import type { Game } from '@/utils/games'
+import { GAMES } from '@/game/games'
+import type { Game } from '@/game/games'
 import TaskTracker from '@/components/common/TaskTracker.vue'
 import GenericGame from '@/components/common/GenericGame.vue'
-import { createGameLogic, createNumberGenerator } from '@/utils/gameFactory'
+import { createGameLogic, createNumberGenerator } from '@/game/gameFactory'
 
 const route = useRoute()
 const gameId = computed(() => route.params.id as string)
@@ -72,12 +72,7 @@ onMounted(() => {
 const handleTaskCompletion = (taskId: number) => {
   const task = tasks.value.find((t) => t.id === taskId)
   if (task) {
-    if (!task.completed) {
-      task.completed = true
-      alert(task.reward) // Or use a more sophisticated notification system
-    } else {
-      task.completed = false // Reset task when score goes back to 0
-    }
+    task.completed = true
   }
 }
 </script>

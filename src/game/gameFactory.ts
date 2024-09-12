@@ -1,11 +1,8 @@
-// src/factories/gameFactory.ts
-
 import { defineAsyncComponent } from 'vue'
-import type { Game } from '@/utils/games'
+import type { Game } from '@/game/games'
 
-export const createGameComponent = (game: Game) => {
-  const componentName = game.id.charAt(0).toUpperCase() + game.id.slice(1)
-  return defineAsyncComponent(() => import(`@/components/games/${componentName}Game.vue`))
+export const createGameComponent = () => {
+  return defineAsyncComponent(() => import('@/components/common/GenericGame.vue'))
 }
 
 export const createGameLogic = (game: Game) => {
@@ -17,7 +14,7 @@ export const createGameLogic = (game: Game) => {
     case 'multiplication':
       return (a: number, b: number) => a * b
     case 'division':
-      return (a: number, b: number) => a / b
+      return (a: number, b: number) => Number((a / b).toFixed(2))
     default:
       throw new Error(`Unsupported game type: ${game.id}`)
   }
@@ -47,5 +44,20 @@ export const createNumberGenerator = (game: Game) => {
       }
     default:
       throw new Error(`Unsupported game type: ${game.id}`)
+  }
+}
+
+export const getOperationSymbol = (gameId: string) => {
+  switch (gameId) {
+    case 'addition':
+      return '+'
+    case 'subtraction':
+      return '-'
+    case 'multiplication':
+      return '×'
+    case 'division':
+      return '÷'
+    default:
+      return '?'
   }
 }

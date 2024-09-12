@@ -1,6 +1,11 @@
 <template>
   <div class="game-container">
     <h3 class="game-title">{{ gameData.title }}</h3>
+    <select v-model="selectedDifficulty" class="difficulty-select">
+      <option v-for="difficulty in gameData.difficulties" :key="difficulty" :value="difficulty">
+        {{ difficulty }}
+      </option>
+    </select>
     <p class="game-equation">{{ state.num1 }} {{ operationSymbol }} {{ state.num2 }} = ?</p>
     <input
       v-model="state.userAnswer"
@@ -26,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useGame } from '@/utils/useGame'
 import { handleGameLogic } from '@/utils/gameUtils'
 import type { Game } from '@/game/games'
@@ -47,7 +52,15 @@ const emit = defineEmits<{
   (e: 'task-completed', taskId: number): void
 }>()
 
-const { state, checkAnswer } = useGame(props.gameLogic, props.numberGenerator)
+const selectedDifficulty = ref(props.gameData.difficulties[0])
+
+const { state, checkAnswer, resetGame } = useGame(props.gameLogic, () =>
+  props.numberGenerator(selectedDifficulty.value)
+)
+
+watch(selectedDifficulty, () => {
+  resetGame()
+})
 
 const startTime = ref(Date.now())
 const equationsSolved = ref(0)

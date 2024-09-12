@@ -20,23 +20,31 @@ export const createGameLogic = (game: Game) => {
   }
 }
 
-export const createNumberGenerator = (game: Game) => {
+export const createNumberGenerator = (game: Game, difficulty: string) => {
   switch (game.id) {
     case 'addition':
     case 'subtraction':
-      return () => ({
-        num1: Math.floor(Math.random() * 20) + 1,
-        num2: Math.floor(Math.random() * 20) + 1
-      })
+      return () => {
+        const max = difficulty === 'Easy' ? 10 : difficulty === 'Medium' ? 20 : 50
+        return {
+          num1: Math.floor(Math.random() * max) + 1,
+          num2: Math.floor(Math.random() * max) + 1
+        }
+      }
     case 'multiplication':
-      return () => ({
-        num1: Math.floor(Math.random() * 12) + 1,
-        num2: Math.floor(Math.random() * 12) + 1
-      })
+      return () => {
+        const max = difficulty === 'Easy' ? 5 : difficulty === 'Medium' ? 12 : 20
+        return {
+          num1: Math.floor(Math.random() * max) + 1,
+          num2: Math.floor(Math.random() * max) + 1
+        }
+      }
     case 'division':
       return () => {
-        const divisor = Math.floor(Math.random() * 12) + 1
-        const quotient = Math.floor(Math.random() * 12) + 1
+        const maxDivisor = difficulty === 'Easy' ? 5 : difficulty === 'Medium' ? 12 : 20
+        const maxQuotient = difficulty === 'Easy' ? 5 : difficulty === 'Medium' ? 12 : 15
+        const divisor = Math.floor(Math.random() * maxDivisor) + 1
+        const quotient = Math.floor(Math.random() * maxQuotient) + 1
         return {
           num1: divisor * quotient,
           num2: divisor

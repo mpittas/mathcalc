@@ -12,6 +12,27 @@ interface Task {
   reward: string
 }
 
+const checkTaskCompletion = (
+  equationsSolved: number,
+  score: number,
+  fastSolves: number,
+  tasks: Task[],
+  emitTaskCompleted: (taskId: number) => void
+) => {
+  if (equationsSolved === 5) emitTaskCompleted(1)
+  if (score === 10) emitTaskCompleted(2)
+  if (fastSolves === 3 && !tasks[2].completed) emitTaskCompleted(3)
+}
+
+const updateCounts = (equationsSolved: Ref<number>, fastSolves: Ref<number>, timeTaken: number) => {
+  equationsSolved.value++
+  if (timeTaken <= 10) {
+    fastSolves.value++
+  } else {
+    fastSolves.value = 0
+  }
+}
+
 export const handleGameLogic = (
   state: Ref<GameState>,
   equationsSolved: Ref<number>,
@@ -21,25 +42,15 @@ export const handleGameLogic = (
   emitTaskCompleted: (taskId: number) => void
 ) => {
   if (state.value.feedback === 'Correct!') {
-    equationsSolved.value++
-
-    // Check for task completion
-    if (equationsSolved.value === 5) {
-      emitTaskCompleted(1)
-    }
-    if (state.value.score === 10) {
-      emitTaskCompleted(2)
-    }
-    if (timeTaken <= 10) {
-      fastSolves.value++
-      if (fastSolves.value === 3 && !tasks[2].completed) {
-        emitTaskCompleted(3)
-      }
-    } else {
-      fastSolves.value = 0
-    }
+    updateCounts(equationsSolved, fastSolves, timeTaken)
+    checkTaskCompletion(
+      equationsSolved.value,
+      state.value.score,
+      fastSolves.value,
+      tasks,
+      emitTaskCompleted
+    )
   } else {
-    // Reset counts when an incorrect answer is given
     equationsSolved.value = 0
     fastSolves.value = 0
   }

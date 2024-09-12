@@ -1,6 +1,14 @@
 <template>
   <div class="game-container">
     <h3 class="game-title">{{ gameData.title }}</h3>
+    <div class="difficulty-selector">
+      <label for="difficulty">Difficulty:</label>
+      <select id="difficulty" v-model="state.difficulty" @change="onDifficultyChange">
+        <option value="Easy">Easy</option>
+        <option value="Medium">Medium</option>
+        <option value="Hard">Hard</option>
+      </select>
+    </div>
     <p class="game-equation">{{ state.num1 }} {{ operationSymbol }} {{ state.num2 }} = ?</p>
     <input
       v-model="state.userAnswer"
@@ -34,7 +42,7 @@ import type { Game } from '@/game/games'
 const props = defineProps<{
   gameData: Game
   gameLogic: (a: number, b: number) => number
-  numberGenerator: () => { num1: number; num2: number }
+  numberGenerator: (difficulty: string) => { num1: number; num2: number }
   tasks: Array<{
     id: number
     description: string
@@ -47,7 +55,7 @@ const emit = defineEmits<{
   (e: 'task-completed', taskId: number): void
 }>()
 
-const { state, checkAnswer } = useGame(props.gameLogic, props.numberGenerator)
+const { state, checkAnswer, setDifficulty } = useGame(props.gameLogic, props.numberGenerator)
 
 const startTime = ref(Date.now())
 const equationsSolved = ref(0)
@@ -74,6 +82,10 @@ const handleSubmit = () => {
       }
     })
   }
+}
+
+const onDifficultyChange = () => {
+  setDifficulty(state.value.difficulty)
 }
 
 const operationSymbol = computed(() => {

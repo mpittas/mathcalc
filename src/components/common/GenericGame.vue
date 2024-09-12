@@ -29,7 +29,7 @@
 import { computed, ref } from 'vue'
 import { useGame } from '@/utils/useGame'
 import { handleGameLogic } from '@/utils/gameUtils'
-import type { Game } from '@/constants/games'
+import type { Game } from '@/game/games'
 
 const props = defineProps<{
   gameData: Game

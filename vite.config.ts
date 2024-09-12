@@ -23,5 +23,13 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: fileURLToPath(new URL('./index.html', import.meta.url)),
+        _redirects: fileURLToPath(new URL('./public/_redirects', import.meta.url))
+      }
+    }
   }
 })

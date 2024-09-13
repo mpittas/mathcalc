@@ -6,23 +6,21 @@ interface GameState {
   num2: number
   userAnswer: number | null
   feedback: string
+  difficulty: string
 }
-
-type NumberGenerator = () => { num1: number; num2: number }
 
 export function useGame(
   operation: (a: number, b: number) => number,
-  generateNumbers: NumberGenerator = () => ({
-    num1: Math.floor(Math.random() * 10) + 1,
-    num2: Math.floor(Math.random() * 10) + 1
-  })
+  generateNumbers: (difficulty: string) => { num1: number; num2: number },
+  initialDifficulty: string = 'Medium'
 ) {
   const state = ref<GameState>({
     score: 0,
     num1: 0,
     num2: 0,
     userAnswer: null,
-    feedback: ''
+    feedback: '',
+    difficulty: initialDifficulty
   })
 
   const correctAnswer = computed(() =>
@@ -30,15 +28,18 @@ export function useGame(
   )
 
   const generateNewNumbers = () => {
-    const { num1, num2 } = generateNumbers()
+    const { num1, num2 } = generateNumbers(state.value.difficulty)
     state.value.num1 = num1
     state.value.num2 = num2
   }
 
-  const resetGame = () => {
+  const resetGame = (difficulty?: string) => {
     state.value.score = 0
     state.value.userAnswer = null
     state.value.feedback = ''
+    if (difficulty) {
+      state.value.difficulty = difficulty
+    }
     generateNewNumbers()
   }
 
@@ -51,9 +52,13 @@ export function useGame(
       state.value.feedback = `Incorrect. The correct answer was ${correctAnswer.value}.`
     }
 
-    // Generate new numbers
     generateNewNumbers()
     state.value.userAnswer = null
+  }
+
+  const setDifficulty = (difficulty: string) => {
+    state.value.difficulty = difficulty
+    resetGame()
   }
 
   // Initialize the game
@@ -63,6 +68,7 @@ export function useGame(
     state,
     correctAnswer,
     checkAnswer,
-    resetGame
+    resetGame,
+    setDifficulty
   }
 }
